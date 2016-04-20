@@ -11,16 +11,7 @@ import Foundation
 class Photo {
   let title: String
   let mediaLink: NSURL
-  //{
-//    didSet {
-//      let session = NSURLSession.sharedSession()
-//      let task = session.dataTaskWithURL(mediaLink) { (data, response, error) in
-//        self.imageData = data
-//      }
-//      task.resume()
-//    }
-//  }
-//  var imageData: NSData?
+  var media: NSData?
   
   init(title: String, mediaLink: NSURL) {
     self.title = title
