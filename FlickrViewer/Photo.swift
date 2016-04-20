@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Photo {
+class Photo: NSObject {
   let title: String
   let mediaLink: NSURL
   var media: NSData?
@@ -16,6 +16,7 @@ class Photo {
   init(title: String, mediaLink: NSURL) {
     self.title = title
     self.mediaLink = mediaLink
+    super.init()
   }
   
 }

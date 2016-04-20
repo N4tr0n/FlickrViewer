@@ -8,7 +8,22 @@
 
 import UIKit
 
-class FlickrFeedController: UIViewController {
+class FlickrFeedController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+  
+  var collectionView: UICollectionView!
+  
+  override func loadView() {
+    collectionView = UICollectionView()
+    view = collectionView
+  }
+  
+  // MARK - <UICollectionViewDataSource>
+  func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    return 0;
+  }
 
+  func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    return UICollectionViewCell()
+  }
 }
 

@@ -13,9 +13,14 @@ class PhotoStore {
   
   var allPhotos = [Photo]()
   
+  static let sharedStore = PhotoStore()
+  
   func loadPhotos(completion: (success: Bool, photos: [Photo]?) -> ()) {
     FlickrClient.sharedClient.fetchPublicPhotosFeed { (success, object) in
       if success {
+        if self.allPhotos.count > 0 {
+          self.allPhotos.removeAll()
+        }
         if let object = object {
           let json = JSON(object)
           let items = json["items"]
