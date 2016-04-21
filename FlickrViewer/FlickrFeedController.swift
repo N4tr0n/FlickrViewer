@@ -12,27 +12,32 @@ import SDWebImage
 class FlickrFeedController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   
   var collectionView: UICollectionView!
-  var photos: [Photo]?
+  //var photos: [Photo]?
   
   override func loadView() {
+    navigationItem.title = "Public Photos"
     let flowLayout = UICollectionViewFlowLayout()
     flowLayout.minimumInteritemSpacing = 0.0
     flowLayout.minimumLineSpacing = 0.0
     let cellWidth = UIScreen.mainScreen().bounds.size.width / 2
     flowLayout.itemSize = CGSize(width: cellWidth, height: cellWidth)
     collectionView = UICollectionView(frame: UIScreen.mainScreen().bounds, collectionViewLayout: flowLayout)
-    collectionView.registerClass(PhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
-    collectionView.delegate = self
-    collectionView.dataSource = self
+    collectionView?.registerClass(PhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
+    collectionView?.delegate = self
+    collectionView?.dataSource = self
+    collectionView?.backgroundColor = UIColor.whiteColor()
 
     view = collectionView
-    
   }
 
   override func viewDidLoad() {
     refreshPhotos { (succeeded, photos) in
       if succeeded {
         print("Finished loading photos")
+        dispatch_async(dispatch_get_main_queue(), {
+          self.collectionView?.reloadData()
+        })
+
       } else {
         print("Failed to load photos")
       }
@@ -41,11 +46,12 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   
   // MARK - <UICollectionViewDataSource>
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    if photos != nil {
-    return photos!.count;
-    } else {
-      return 0;
-    }
+    return PhotoStore.sharedStore.allPhotos.count
+//    if photos != nil {
+//      return photos!.count;
+//    } else {
+//      return 0;
+//    }
   }
   
   func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -61,14 +67,15 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
     //let photoCell = cell as? PhotoCell
     if let photoCell = cell as? PhotoCell {
       // set image
-      photoCell.imageView.sd_setImageWithURL(photos![indexPath.item].mediaLink)
+      //print("mediaLink = \(photos![indexPath.item].mediaLink)")
+      photoCell.imageView.sd_setImageWithURL(PhotoStore.sharedStore.allPhotos[indexPath.item].mediaLink)
     }
   }
   
   func refreshPhotos(completion: (succeeded: Bool, photos: [Photo]?) -> ()) {
     PhotoStore.sharedStore.loadPhotos { (success, photos) in
       if success {
-        self.photos = photos
+        //self.photos = photos
         completion(succeeded: true, photos: photos)
       } else {
         completion(succeeded: false, photos: nil)

@@ -21,14 +21,13 @@ class PhotoStore {
         if self.allPhotos.count > 0 {
           self.allPhotos.removeAll()
         }
-        if let object = object {
-          let json = JSON(object)
-          let items = json["items"]
-          for (index, subJson):(String, JSON) in items {
-            if let title = subJson[index]["title"].string,
-              let mediaLink = subJson[index]["media"]["m"].string {
-              self.allPhotos.append(Photo(title: title, mediaLink: NSURL(string: mediaLink)!))
-            }
+        let json = object
+        let items = json["items"]
+        for (_, subJson):(String, JSON) in items {
+          if let title = subJson["title"].string,
+            let mediaLink = subJson["media"]["m"].string {
+            print("title = \(title), m = \(mediaLink)")
+            self.allPhotos.append(Photo(title: title, mediaLink: NSURL(string: mediaLink)!))
           }
         }
         completion(success: true, photos: self.allPhotos)
@@ -37,5 +36,5 @@ class PhotoStore {
       }
     }
   }
-
+  
 }

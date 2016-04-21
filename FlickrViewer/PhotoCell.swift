@@ -23,7 +23,9 @@ class PhotoCell: UICollectionViewCell {
   
   func configureImageView() {
     imageView = UIImageView()
-    imageView.contentMode = .ScaleAspectFit
+    imageView.contentMode = .ScaleAspectFill
+    imageView.translatesAutoresizingMaskIntoConstraints = false
+    imageView.clipsToBounds = true
     contentView.addSubview(imageView)
     let topConstraint = imageView.topAnchor.constraintEqualToAnchor(contentView.topAnchor)
     let bottomConstraint = imageView.bottomAnchor.constraintEqualToAnchor(contentView.bottomAnchor)
