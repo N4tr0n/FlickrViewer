@@ -28,6 +28,16 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
     view = collectionView
     
   }
+
+  override func viewDidLoad() {
+    refreshPhotos { (succeeded, photos) in
+      if succeeded {
+        print("Finished loading photos")
+      } else {
+        print("Failed to load photos")
+      }
+    }
+  }
   
   // MARK - <UICollectionViewDataSource>
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -48,14 +58,12 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   }
   
   func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    let photoCell = cell as? PhotoCell
-    if let photoCell = photoCell {
+    //let photoCell = cell as? PhotoCell
+    if let photoCell = cell as? PhotoCell {
       // set image
-      photoCell.imageView.
+      photoCell.imageView.sd_setImageWithURL(photos![indexPath.item].mediaLink)
     }
   }
-  
-  
   
   func refreshPhotos(completion: (succeeded: Bool, photos: [Photo]?) -> ()) {
     PhotoStore.sharedStore.loadPhotos { (success, photos) in
@@ -67,5 +75,6 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
       }
     }
   }
+
 }
 

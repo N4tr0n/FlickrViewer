@@ -33,7 +33,7 @@ class FlickrClient {
   }
   
   private func flickrRequest(path: String, params: Dictionary<String, AnyObject>? = nil) -> NSMutableURLRequest {
-    let baseURL = NSURL(string: "https://api.flickr.com/services")!
+    let baseURL = NSURL(string: "https://api.flickr.com/services/")!
     let url = NSURL(string: path, relativeToURL: baseURL)!
     let request = NSMutableURLRequest(URL: url)
     if let params = params {

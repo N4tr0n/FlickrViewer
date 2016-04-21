@@ -34,4 +34,5 @@ class PhotoCell: UICollectionViewCell {
     leadingConstraint.active = true
     trailingConstraint.active = true
   }
+
 }
