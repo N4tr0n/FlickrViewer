@@ -9,11 +9,21 @@
 import UIKit
 
 class PhotoViewController: UIViewController {
+  var imageView: UIImageView!
+  var imageTitle = String()
+  var image = UIImage()
+
+  override func loadView() {
+    imageView = UIImageView()
+    imageView.contentMode = .ScaleAspectFit
+    imageView.backgroundColor = UIColor.whiteColor()
+    view = imageView
+  }
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    
-    // Do any additional setup after loading the view.
+  override func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(true)
+    navigationItem.title = imageTitle
+    imageView.image = image
   }
   
 }

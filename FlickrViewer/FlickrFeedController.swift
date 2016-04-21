@@ -12,7 +12,6 @@ import SDWebImage
 class FlickrFeedController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   
   var collectionView: UICollectionView!
-  //var photos: [Photo]?
   
   override func loadView() {
     navigationItem.title = "Public Photos"
@@ -31,6 +30,7 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   }
 
   override func viewDidLoad() {
+    super.viewDidLoad()
     refreshPhotos { (succeeded, photos) in
       if succeeded {
         print("Finished loading photos")
@@ -47,11 +47,6 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   // MARK - <UICollectionViewDataSource>
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return PhotoStore.sharedStore.allPhotos.count
-//    if photos != nil {
-//      return photos!.count;
-//    } else {
-//      return 0;
-//    }
   }
   
   func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -64,23 +59,39 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   }
   
   func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
-    //let photoCell = cell as? PhotoCell
     if let photoCell = cell as? PhotoCell {
-      // set image
-      //print("mediaLink = \(photos![indexPath.item].mediaLink)")
       photoCell.imageView.sd_setImageWithURL(PhotoStore.sharedStore.allPhotos[indexPath.item].mediaLink)
     }
+  }
+  
+  func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    let photoViewController = PhotoViewController()
+    photoViewController.imageTitle = PhotoStore.sharedStore.allPhotos[indexPath.item].title
+    let photoCell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
+    photoViewController.image = photoCell.imageView.image!
+    navigationController?.pushViewController(photoViewController, animated: true)
+  }
+  
+  func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    let cellWidth = UIScreen.mainScreen().bounds.size.width / 2
+    return CGSize(width: cellWidth, height: cellWidth)
   }
   
   func refreshPhotos(completion: (succeeded: Bool, photos: [Photo]?) -> ()) {
     PhotoStore.sharedStore.loadPhotos { (success, photos) in
       if success {
-        //self.photos = photos
         completion(succeeded: true, photos: photos)
       } else {
         completion(succeeded: false, photos: nil)
       }
     }
+  }
+
+  override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    coordinator.animateAlongsideTransition({ (UIViewControllerTransitionCoordinatorContext) in
+      self.collectionView.reloadData()
+      }) { (UIViewControllerTransitionCoordinatorContext) in }
+    super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
   }
 
 }
