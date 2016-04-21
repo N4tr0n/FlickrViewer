@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class FlickrFeedController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   
@@ -14,9 +15,18 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   var photos: [Photo]?
   
   override func loadView() {
-    collectionView = UICollectionView()
-    view = collectionView
+    let flowLayout = UICollectionViewFlowLayout()
+    flowLayout.minimumInteritemSpacing = 0.0
+    flowLayout.minimumLineSpacing = 0.0
+    let cellWidth = UIScreen.mainScreen().bounds.size.width / 2
+    flowLayout.itemSize = CGSize(width: cellWidth, height: cellWidth)
+    collectionView = UICollectionView(frame: UIScreen.mainScreen().bounds, collectionViewLayout: flowLayout)
     collectionView.registerClass(PhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
+    collectionView.delegate = self
+    collectionView.dataSource = self
+
+    view = collectionView
+    
   }
   
   // MARK - <UICollectionViewDataSource>
@@ -27,7 +37,11 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
       return 0;
     }
   }
-
+  
+  func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    return 1
+  }
+  
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath)
     return cell
@@ -37,8 +51,11 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
     let photoCell = cell as? PhotoCell
     if let photoCell = photoCell {
       // set image
+      photoCell.imageView.
     }
   }
+  
+  
   
   func refreshPhotos(completion: (succeeded: Bool, photos: [Photo]?) -> ()) {
     PhotoStore.sharedStore.loadPhotos { (success, photos) in
