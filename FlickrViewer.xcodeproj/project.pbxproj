@@ -14,6 +14,7 @@
 		D8011FED1CC4418D0032D90B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8011FEC1CC4418D0032D90B /* Assets.xcassets */; };
 		D8011FF01CC4418D0032D90B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8011FEE1CC4418D0032D90B /* LaunchScreen.storyboard */; };
 		D8011FFA1CC4447D0032D90B /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8011FF91CC4447D0032D90B /* Photo.swift */; };
+		D80D09721CC86E55001F57C0 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80D09711CC86E55001F57C0 /* PhotoCell.swift */; };
 		D84BD6321CC71734004EEA79 /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BD6311CC71734004EEA79 /* FlickrClient.swift */; };
 		D84BD6341CC72086004EEA79 /* PhotoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84BD6331CC72086004EEA79 /* PhotoStore.swift */; };
 /* End PBXBuildFile section */
@@ -30,6 +31,7 @@
 		D8011FEF1CC4418D0032D90B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D8011FF11CC4418D0032D90B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8011FF91CC4447D0032D90B /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		D80D09711CC86E55001F57C0 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		D84BD6311CC71734004EEA79 /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 		D84BD6331CC72086004EEA79 /* PhotoStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,6 +88,7 @@
 			children = (
 				D8011FE51CC4418D0032D90B /* AppDelegate.swift */,
 				D8011FE71CC4418D0032D90B /* FlickrFeedController.swift */,
+				D80D09711CC86E55001F57C0 /* PhotoCell.swift */,
 				D8011FF91CC4447D0032D90B /* Photo.swift */,
 				D84BD6331CC72086004EEA79 /* PhotoStore.swift */,
 				D84BD6311CC71734004EEA79 /* FlickrClient.swift */,
@@ -223,6 +226,7 @@
 				D8011FFA1CC4447D0032D90B /* Photo.swift in Sources */,
 				D8011FE81CC4418D0032D90B /* FlickrFeedController.swift in Sources */,
 				D8011FE61CC4418D0032D90B /* AppDelegate.swift in Sources */,
+				D80D09721CC86E55001F57C0 /* PhotoCell.swift in Sources */,
 				D84BD6321CC71734004EEA79 /* FlickrClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
