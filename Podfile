@@ -6,5 +6,7 @@ use_frameworks!
 target 'FlickrViewer' do
   pod 'SwiftyJSON', '~> 2.3'
   pod 'SDWebImage'
+  #  pod 'INSPullToRefresh'
+  pod 'PullToRefreshSwift'
 end
 

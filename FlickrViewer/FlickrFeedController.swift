@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import PullToRefreshSwift
 
 class FlickrFeedController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
   
@@ -22,13 +23,25 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
     flowLayout.itemSize = CGSize(width: cellWidth, height: cellWidth)
     collectionView = UICollectionView(frame: UIScreen.mainScreen().bounds, collectionViewLayout: flowLayout)
     collectionView?.registerClass(PhotoCell.self, forCellWithReuseIdentifier: "PhotoCell")
+    collectionView?.registerClass(UICollectionViewCell.self, forCellWithReuseIdentifier: "EmptyCell")
     collectionView?.delegate = self
     collectionView?.dataSource = self
     collectionView?.backgroundColor = UIColor.whiteColor()
-
+    collectionView.bounces = true
+    collectionView.alwaysBounceVertical = true
+    let options = PullToRefreshOption()
+    collectionView.addPullToRefresh(options: options) { [weak self] in
+      self?.refreshPhotos({ (succeeded, photos) in
+        dispatch_async(dispatch_get_main_queue(), {
+          self?.collectionView.reloadData()
+          self?.collectionView.stopPullToRefresh()
+        })
+      })
+    }
+    
     view = collectionView
   }
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     refreshPhotos { (succeeded, photos) in
@@ -37,7 +50,7 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
         dispatch_async(dispatch_get_main_queue(), {
           self.collectionView?.reloadData()
         })
-
+        
       } else {
         print("Failed to load photos")
       }
@@ -46,7 +59,8 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   
   // MARK - <UICollectionViewDataSource>
   func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return PhotoStore.sharedStore.allPhotos.count
+    let count = PhotoStore.sharedStore.allPhotos.count
+    return count > 0 ? count : 1
   }
   
   func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
@@ -54,23 +68,44 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   }
   
   func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath)
-    return cell
+    if PhotoStore.sharedStore.allPhotos.count > 0 {
+      let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PhotoCell", forIndexPath: indexPath)
+      return cell
+    } else {
+      let cell = collectionView.dequeueReusableCellWithReuseIdentifier("EmptyCell", forIndexPath: indexPath)
+      return cell
+    }
   }
   
   func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
     if let photoCell = cell as? PhotoCell {
       photoCell.imageView.sd_setImageWithURL(PhotoStore.sharedStore.allPhotos[indexPath.item].mediaLink)
+    } else {
+      let label = UILabel()
+      label.text = "No photos to display"
+      label.numberOfLines = 0
+      label.textAlignment = .Center
+      label.translatesAutoresizingMaskIntoConstraints = false
+      cell.contentView.addSubview(label)
+      let topConstraint = label.topAnchor.constraintEqualToAnchor(cell.contentView.topAnchor)
+      let bottomConstraint = label.bottomAnchor.constraintEqualToAnchor(cell.contentView.bottomAnchor)
+      let leadingConstraint = label.leadingAnchor.constraintEqualToAnchor(cell.contentView.leadingAnchor, constant: 4)
+      let trailingConstraint = label.trailingAnchor.constraintEqualToAnchor(cell.contentView.trailingAnchor, constant: 4)
+      topConstraint.active = true
+      bottomConstraint.active = true
+      leadingConstraint.active = true
+      trailingConstraint.active = true
     }
   }
   
   func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    let photoCell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
-    if let image = photoCell.imageView.image {
-      let photoViewController = PhotoViewController()
-      photoViewController.image = image
-      photoViewController.imageTitle = PhotoStore.sharedStore.allPhotos[indexPath.item].title
-      navigationController?.pushViewController(photoViewController, animated: true)
+    if let photoCell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCell {
+      if let image = photoCell.imageView.image {
+        let photoViewController = PhotoViewController()
+        photoViewController.image = image
+        photoViewController.imageTitle = PhotoStore.sharedStore.allPhotos[indexPath.item].title
+        navigationController?.pushViewController(photoViewController, animated: true)
+      }
     }
   }
   
@@ -88,13 +123,13 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
       }
     }
   }
-
+  
   override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
     coordinator.animateAlongsideTransition({ (UIViewControllerTransitionCoordinatorContext) in
       self.collectionView.reloadData()
-      }) { (UIViewControllerTransitionCoordinatorContext) in }
+    }) { (UIViewControllerTransitionCoordinatorContext) in }
     super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
   }
-
+  
 }
 

@@ -1,17 +1,20 @@
 PODS:
+  - PullToRefreshSwift (2.0.0)
   - SDWebImage (3.7.5):
     - SDWebImage/Core (= 3.7.5)
   - SDWebImage/Core (3.7.5)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
+  - PullToRefreshSwift
   - SDWebImage
   - SwiftyJSON (~> 2.3)
 
 SPEC CHECKSUMS:
+  PullToRefreshSwift: 5c509e89c6638eae689813b665eff1a0ea0560d3
   SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: e089641e94486c879f42ea29a6c732f993dc4718
+PODFILE CHECKSUM: 46ebabf650d43466d854e66a39357ec705b37f2e
 
-COCOAPODS: 1.0.0.beta.3
+COCOAPODS: 1.0.0.beta.8
