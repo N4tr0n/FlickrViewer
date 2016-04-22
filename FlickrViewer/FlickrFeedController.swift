@@ -65,11 +65,13 @@ class FlickrFeedController: UIViewController, UICollectionViewDataSource, UIColl
   }
   
   func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-    let photoViewController = PhotoViewController()
-    photoViewController.imageTitle = PhotoStore.sharedStore.allPhotos[indexPath.item].title
     let photoCell = collectionView.cellForItemAtIndexPath(indexPath) as! PhotoCell
-    photoViewController.image = photoCell.imageView.image!
-    navigationController?.pushViewController(photoViewController, animated: true)
+    if let image = photoCell.imageView.image {
+      let photoViewController = PhotoViewController()
+      photoViewController.image = image
+      photoViewController.imageTitle = PhotoStore.sharedStore.allPhotos[indexPath.item].title
+      navigationController?.pushViewController(photoViewController, animated: true)
+    }
   }
   
   func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
